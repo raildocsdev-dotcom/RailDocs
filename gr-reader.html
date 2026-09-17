@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>Indian Railway – General Rules | RailDocs</title>
+    <meta name="description" content="Browse and search all 17 chapters of the Indian Railways (Open Lines) General Rules, 1976." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Baloo+2:wght@600;700;800&family=Space+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+    <script src="gr-data.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0d1a1c;
+            --surface: #142427;
+            --surface2: #1b2f33;
+            --surface-hover: #223c41;
+            --border: rgba(255, 255, 255, 0.09);
+            --border-highlight: rgba(238, 126, 62, 0.45);
+            --primary: #ee7e3e;
+            --primary-dim: rgba(238, 126, 62, 0.14);
+            --accent: #4a7bc7;
+            --accent-dim: rgba(74, 123, 199, 0.15);
+            --teal: #12b886;
+            --teal-dim: rgba(18, 184, 134, 0.15);
+            --ink: #f0f4f8;
+            --ink-soft: #9cb1b4;
+            --ink-muted: #5e797d;
+            --radius: 12px;
+            --sidebar-w: 280px;
+        }
+        html, body {
+            height: 100%;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+        }
+        .app {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* ---- SIDEBAR ---- */
+        .sidebar {
+            width: var(--sidebar-w);
+            min-width: var(--sidebar-w);
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex-shrink: 0;
+            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 50;
+        }
+        .sidebar-header {
+            padding: 18px 16px 14px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+        .sidebar-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 9.5px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        .sidebar-book-title {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+            letter-spacing: 0.1px;
+        }
+        .sidebar-book-sub {
+            font-size: 10.5px;
+            color: var(--ink-soft);
+            margin-top: 3px;
+        }
+        .sidebar-home-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 6px 10px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--ink);
+            font-size: 11.5px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .sidebar-home-btn:hover {
+            background: var(--primary-dim);
+            border-color: var(--primary);
+            color: #ffe8c8;
+        }
+        .sidebar-chapters {
+            overflow-y: auto;
+            flex: 1;
+            padding: 8px 6px;
+        }
+        .sidebar-chapters::-webkit-scrollbar { width: 4px; }
+        .sidebar-chapters::-webkit-scrollbar-thumb { background: rgba(238, 126, 62, 0.25); border-radius: 4px; }
+
+        .chapter-item {
+            display: grid;
+            grid-template-columns: 36px 1fr auto;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.16s ease;
+            text-decoration: none;
+            margin-bottom: 3px;
+        }
+        .chapter-item:hover {
+            background: var(--primary-dim);
+            border-left-color: rgba(238, 126, 62, 0.5);
+        }
+        .chapter-item.active {
+            background: rgba(238, 126, 62, 0.18);
+            border-left-color: var(--primary);
+        }
+        .chapter-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--primary);
+            padding: 2px 6px;
+            background: rgba(238, 126, 62, 0.12);
+            border-radius: 4px;
+            text-align: center;
+            width: 100%;
+            justify-self: center;
+        }
+        .chapter-item.active .chapter-num {
+            background: var(--primary);
+            color: #0c1a1c;
+        }
+        .chapter-name {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--ink);
+            line-height: 1.35;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+        .chapter-item.active .chapter-name {
+            color: #ffe8c8;
+            font-weight: 700;
+        }
+        .chapter-count-badge {
+            font-size: 10px;
+            color: var(--ink-muted);
+            font-family: 'Space Mono', monospace;
+            text-align: right;
+            justify-self: end;
+            white-space: nowrap;
+        }
+
+        /* ---- MAIN AREA ---- */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        /* ---- TOPBAR ---- */
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            color: var(--ink-soft);
+            padding: 6px 9px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--ink-soft);
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 7px;
+            padding: 6px 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.18s ease;
+            flex-shrink: 0;
+        }
+        .back-btn:hover {
+            background: var(--primary-dim);
+            color: #ffe8c8;
+            border-color: rgba(238, 126, 62, 0.4);
+        }
+        .search-wrap {
+            flex: 1;
+            position: relative;
+            max-width: 580px;
+        }
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ink-muted);
+            pointer-events: none;
+        }
+        .search-input {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+            padding: 8px 36px 8px 38px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(238, 126, 62, 0.18);
+            background: #1f373b;
+        }
+        .search-input::placeholder {
+            color: var(--ink-muted);
+        }
+        .search-clear {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--ink-soft);
+            cursor: pointer;
+            display: none;
+            font-size: 18px;
+            line-height: 1;
+            padding: 3px;
+        }
+        .search-clear.visible { display: block; }
+        .topbar-book-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 700;
+            background: var(--primary-dim);
+            border: 1px solid rgba(238, 126, 62, 0.3);
+            border-radius: 6px;
+            padding: 4px 10px;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        /* ---- CONTENT SCROLL AREA ---- */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px 40px 60px;
+            scroll-behavior: smooth;
+        }
+        .content-area::-webkit-scrollbar { width: 6px; }
+        .content-area::-webkit-scrollbar-thumb { background: rgba(238, 126, 62, 0.3); border-radius: 6px; }
+
+        /* ---- CHAPTER HEADING ---- */
+        .chapter-heading {
+            margin-bottom: 30px;
+            padding: 20px 24px;
+            background: linear-gradient(135deg, rgba(238, 126, 62, 0.12), rgba(74, 123, 199, 0.08));
+            border: 1px solid rgba(238, 126, 62, 0.25);
+            border-radius: var(--radius);
+            position: relative;
+        }
+        .chapter-heading-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chapter-heading-title {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+        .chapter-heading-count {
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin-top: 6px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* ---- RULE BLOCK ---- */
+        .rule-block {
+            margin-bottom: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .rule-block:hover {
+            border-color: rgba(238, 126, 62, 0.3);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+        }
+        .rule-block.highlighted {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(238, 126, 62, 0.5), 0 6px 24px rgba(238, 126, 62, 0.25);
+            animation: pulseBlock 2s ease 1;
+        }
+        @keyframes pulseBlock {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+        .rule-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 18px;
+            background: rgba(0, 0, 0, 0.25);
+            border-bottom: 1px solid var(--border);
+            gap: 12px;
+        }
+        .rule-block-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .rule-no-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffa56d;
+            background: rgba(238, 126, 62, 0.16);
+            border: 1px solid rgba(238, 126, 62, 0.35);
+            border-radius: 6px;
+            padding: 2.5px 9px;
+            flex-shrink: 0;
+            letter-spacing: 0.2px;
+        }
+        .rule-title-text {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #ffe8c8;
+            letter-spacing: 0.2px;
+        }
+        .rule-copy-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--ink-soft);
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.16s ease;
+        }
+        .rule-copy-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .rule-body {
+            padding: 14px 20px 16px;
+        }
+
+        /* GR LINE FORMATTING */
+        .gr-line {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 4px 0;
+            line-height: 1.68;
+        }
+        .gr-line--clause {
+            /* Sub-item of sub-rule: Indented with tab space */
+            padding-left: 38px;
+        }
+        .gr-line--subclause {
+            /* Sub-clause of clause: Indented under clause */
+            padding-left: 72px;
+        }
+        .gr-line--sub-cont {
+            /* Continuation paragraph of same sub-rule */
+            padding-left: 38px;
+        }
+        .gr-line--heading {
+            padding: 2px 0 6px;
+        }
+        .gr-line--heading .gr-line-text {
+            color: #f7fafc;
+            font-weight: 600;
+        }
+        .gr-line-prefix {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: #93c5fd;
+            flex-shrink: 0;
+            min-width: 28px;
+            user-select: none;
+        }
+        .gr-line-prefix--clause,
+        .gr-line--clause .gr-line-prefix {
+            color: #34d399; /* Mint green for clauses like (a), (b) */
+            font-weight: 700;
+            min-width: 24px;
+        }
+        .gr-line-prefix--subclause,
+        .gr-line--subclause .gr-line-prefix {
+            color: #fcd34d; /* Amber for sub-clauses like (i), (ii) */
+            font-weight: 700;
+            min-width: 24px;
+        }
+        .gr-line-text {
+            font-size: 13.5px;
+            color: #e2e8f0;
+            line-height: 1.68;
+            font-weight: 400;
+            flex: 1;
+        }
+        mark {
+            background: rgba(238, 126, 62, 0.28);
+            color: #ffe8c8;
+            font-weight: 600;
+            padding: 1px 2px;
+            margin: 0;
+            border-radius: 2px;
+            border-bottom: 2px solid #ee7e3e;
+            white-space: nowrap;
+        }
+
+        /* ---- SEARCH RESULTS VIEW ---- */
+        .search-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .search-header-title {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .search-header-meta {
+            font-size: 13px;
+            color: var(--ink-soft);
+            margin-top: 4px;
+        }
+        .search-header-meta strong {
+            color: var(--primary);
+        }
+        .search-result-block {
+            margin-bottom: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        .search-result-block:hover {
+            border-color: rgba(238, 126, 62, 0.35);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+        }
+        .search-result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.25);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            gap: 10px;
+        }
+        .search-result-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .search-result-chapter-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: #93c5fd;
+            background: rgba(74, 123, 199, 0.15);
+            border: 1px solid rgba(74, 123, 199, 0.3);
+            border-radius: 4px;
+            padding: 2px 7px;
+            flex-shrink: 0;
+        }
+        .search-result-rule-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffa56d;
+            background: rgba(238, 126, 62, 0.16);
+            border: 1px solid rgba(238, 126, 62, 0.35);
+            border-radius: 6px;
+            padding: 2px 8px;
+            flex-shrink: 0;
+        }
+        .search-result-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffe8c8;
+        }
+        .search-result-open-tag {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .search-result-body {
+            padding: 12px 18px 14px;
+        }
+        .search-match-line {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 3px 0;
+            line-height: 1.62;
+        }
+        .search-match-line--clause {
+            padding-left: 36px;
+        }
+        .search-match-line--subclause {
+            padding-left: 68px;
+        }
+        .search-match-line--sub-cont {
+            padding-left: 36px;
+        }
+        .search-line-prefix {
+            font-family: 'Space Mono', monospace;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #93c5fd;
+            flex-shrink: 0;
+            min-width: 26px;
+            user-select: none;
+        }
+        .search-line-prefix--clause,
+        .search-match-line--clause .search-line-prefix {
+            color: #34d399;
+            font-weight: 700;
+            min-width: 22px;
+        }
+        .search-line-prefix--subclause,
+        .search-match-line--subclause .search-line-prefix {
+            color: #fcd34d;
+            font-weight: 700;
+            min-width: 22px;
+        }
+        .search-line-text {
+            flex: 1;
+            font-size: 13.5px;
+            color: #e2e8f0;
+            line-height: 1.62;
+            font-weight: 400;
+        }
+        .search-match-line--heading .search-line-text {
+            color: #f7fafc;
+            font-weight: 600;
+        }
+
+        /* ---- WELCOME / HOME VIEW ---- */
+        .welcome {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 20px 0 60px;
+        }
+        .welcome-hero {
+            text-align: center;
+            padding: 34px 20px 28px;
+            background: linear-gradient(180deg, rgba(238, 126, 62, 0.12) 0%, rgba(20, 36, 39, 0.5) 100%);
+            border: 1px solid rgba(238, 126, 62, 0.25);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .welcome-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(238, 126, 62, 0.15);
+            border: 1px solid rgba(238, 126, 62, 0.35);
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 12px;
+        }
+        .welcome-title {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .welcome-sub {
+            font-size: 14.5px;
+            color: var(--ink-soft);
+            max-width: 620px;
+            margin: 0 auto 22px;
+            line-height: 1.6;
+        }
+        .welcome-stats {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .stat-pill {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 12px;
+            color: var(--ink-soft);
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+        .stat-pill strong {
+            color: var(--primary);
+            font-size: 17px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* QUICK SEARCH TOPIC PILLS */
+        .quick-topics {
+            margin-bottom: 30px;
+        }
+        .quick-topics-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-family: 'Space Mono', monospace;
+        }
+        .topics-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .topic-chip {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--ink);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .topic-chip:hover {
+            background: var(--primary-dim);
+            border-color: var(--primary);
+            color: #ffe8c8;
+            transform: translateY(-1px);
+        }
+
+        /* CHAPTER CARDS GRID */
+        .welcome-grid-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 14px;
+            font-family: 'Baloo 2', sans-serif;
+            letter-spacing: 0.3px;
+        }
+        .welcome-chapters {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+        }
+        .welcome-ch-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .welcome-ch-card:hover {
+            background: var(--surface2);
+            border-color: rgba(238, 126, 62, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+        .welcome-ch-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(238, 126, 62, 0.12);
+            border: 1px solid rgba(238, 126, 62, 0.25);
+            border-radius: 6px;
+            padding: 5px 8px;
+            flex-shrink: 0;
+            min-width: 44px;
+            text-align: center;
+        }
+        .welcome-ch-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .welcome-ch-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            line-height: 1.35;
+        }
+        .welcome-ch-meta {
+            font-size: 11px;
+            color: var(--ink-soft);
+            margin-top: 3px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 70px 20px;
+            color: var(--ink-muted);
+        }
+        .empty-state-icon {
+            font-size: 44px;
+            margin-bottom: 14px;
+            opacity: 0.6;
+        }
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink-soft);
+            margin-bottom: 8px;
+        }
+        .empty-state-sub {
+            font-size: 13px;
+            color: var(--ink-muted);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .print-topbar-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #ffe3d1;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.18s ease;
+        }
+        .print-topbar-btn:hover {
+            background: rgba(238, 126, 62, 0.22);
+            border-color: rgba(238, 126, 62, 0.5);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 840px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                box-shadow: none;
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+                box-shadow: 6px 0 28px rgba(0, 0, 0, 0.7);
+            }
+            .sidebar-toggle { display: flex; }
+            .content-area { padding: 20px 16px 50px; }
+            .topbar-book-badge { display: none; }
+        }
+
+        /* PRINT STYLES: Prints current page contentArea without index/sidebar */
+        /* PRINT STYLES: Prints current page contentArea without index/sidebar */
+        @media print {
+            *, *::before, *::after {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            html, body {
+                height: auto !important;
+                overflow: visible !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+            .app {
+                display: block !important;
+                height: auto !important;
+                width: 100% !important;
+                overflow: visible !important;
+            }
+            .main {
+                height: auto !important;
+                overflow: visible !important;
+                display: block !important;
+            }
+            .content-area {
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+            .sidebar,
+            .topbar,
+            .sidebar-toggle,
+            .back-btn,
+            .search-wrap,
+            .print-topbar-btn,
+            .rule-copy-btn,
+            .search-result-open-tag,
+            .quick-topics {
+                display: none !important;
+            }
+
+            /* ALL TEXT IN RULES & SEARCH RESULTS MUST BE 100% VISIBLE BLACK */
+            .content-area,
+            .content-area *,
+            .rule-body,
+            .rule-body *,
+            .search-result-body,
+            .search-result-body *,
+            .gr-line-text,
+            .search-line-text,
+            .chapter-heading-label,
+            .chapter-heading-title,
+            .chapter-heading-count {
+                color: #000000 !important;
+            }
+
+            /* Override any inline styles with grey colors */
+            .content-area [style*="color"] {
+                color: #000000 !important;
+            }
+
+            .rule-block, .search-result-block {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                border: 1.5px solid #1e293b !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                margin-bottom: 18px !important;
+                box-shadow: none !important;
+                border-radius: 6px !important;
+            }
+            .rule-block-header, .search-result-header {
+                background: #f8fafc !important;
+                border-bottom: 1.5px solid #1e293b !important;
+                color: #000000 !important;
+                padding: 8px 12px !important;
+            }
+            .rule-title-text, .search-result-title {
+                color: #000000 !important;
+                font-weight: 700 !important;
+            }
+            .rule-no-badge, .search-result-rule-badge, .search-result-chapter-tag {
+                background: #f1f5f9 !important;
+                border: 1.5px solid #000000 !important;
+                color: #000000 !important;
+                font-weight: 800 !important;
+                border-radius: 4px !important;
+            }
+            .rule-body, .search-result-body {
+                padding: 10px 14px !important;
+                color: #000000 !important;
+            }
+            .gr-line-prefix, .search-line-prefix,
+            .gr-line--clause .gr-line-prefix,
+            .search-match-line--clause .search-line-prefix {
+                color: #000000 !important;
+                font-weight: 800 !important;
+            }
+            .chapter-heading {
+                margin-bottom: 18px !important;
+                padding-bottom: 10px !important;
+                border-bottom: 2.5px solid #000000 !important;
+            }
+            .chapter-heading-label {
+                color: #000000 !important;
+                font-weight: 800 !important;
+                letter-spacing: 0.5px !important;
+            }
+            .chapter-heading-title {
+                color: #000000 !important;
+                font-weight: 800 !important;
+            }
+            .chapter-heading-count {
+                color: #000000 !important;
+                font-weight: 700 !important;
+            }
+
+            /* HIGHLIGHTS IN PRINT */
+            mark {
+                background: #fef08a !important;
+                color: #000000 !important;
+                border-bottom: 2px solid #ca8a04 !important;
+                padding: 1px 3px !important;
+                font-weight: 700 !important;
+            }
+
+            .welcome-hero, .welcome-ch-card {
+                background: #ffffff !important;
+                border: 1px solid #1e293b !important;
+                color: #000000 !important;
+            }
+            .welcome-title, .welcome-sub, .stat-pill, .welcome-ch-name {
+                color: #000000 !important;
+            }
+        }
+
+        /* ── Signal/Hand-signal figure images (Chapter III) ── */
+        .gr-signal-figures {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0 14px 0;
+            padding: 10px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            border: 1px solid rgba(99, 130, 185, 0.25);
+            align-items: flex-start;
+        }
+        .gr-signal-figure {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+        }
+        .gr-signal-img {
+            max-width: 100%;
+            max-height: 280px;
+            width: auto;
+            height: auto;
+            border-radius: 4px;
+            display: block;
+            object-fit: contain;
+            background: #fff;
+            padding: 4px;
+        }
+        /* compact on small screens */
+        @media (max-width: 600px) {
+            .gr-signal-figures { flex-direction: column; }
+            .gr-signal-img { max-height: 200px; }
+        }
+        @media print {
+            .gr-signal-figures { border: 1px solid #ccc; background: #fff; }
+            .gr-signal-img { max-height: 220px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <!-- Collapsible Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-tag">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+                Indian Railways
+            </div>
+            <div class="sidebar-book-title">GENERAL RULES</div>
+            <div class="sidebar-book-sub">IR (Open Lines) GR, 1976 &bull; 17 Chapters</div>
+            <a href="javascript:void(0)" class="sidebar-home-btn" onclick="renderWelcome()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Book Overview / All Chapters
+            </a>
+        </div>
+        <div class="sidebar-chapters" id="sidebarChapters"></div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+        <!-- Top Navigation -->
+        <header class="topbar">
+            <button class="sidebar-toggle" id="sidebarToggleBtn" onclick="toggleSidebar()" aria-label="Toggle chapters sidebar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+
+            <a href="index.html" class="back-btn" title="Return to RailDocs Portal">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                RailDocs
+            </a>
+
+            <!-- Search Bar -->
+            <div class="search-wrap">
+                <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search rules, keywords, clause text (e.g. Signals, 3.03, Caution)..." oninput="handleSearch()" autocomplete="off" />
+                <button class="search-clear" id="searchClear" onclick="clearSearch()" title="Clear search">&times;</button>
+            </div>
+            <button class="print-topbar-btn" onclick="printCurrentView()" title="Print current page content (without sidebar/index)" aria-label="Print content">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span>Print</span>
+            </button>
+
+            <div class="topbar-book-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+                IR GENERAL RULES
+            </div>
+        </header>
+
+        <!-- Dynamic Scrollable Content -->
+        <div class="content-area" id="contentArea"></div>
+    </main>
+</div>
+
+<script>
+const CHAPTER_ORDER = [
+    'Chapter I', 'Chapter II', 'Chapter III', 'Chapter IV', 'Chapter V',
+    'Chapter VI', 'Chapter VII', 'Chapter VIII', 'Chapter IX', 'Chapter X',
+    'Chapter XI', 'Chapter XII', 'Chapter XIII', 'Chapter XIV', 'Chapter XV',
+    'Chapter XVI', 'Chapter XVII'
+];
+
+const ROMAN_TO_ARABIC = {
+    'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5,
+    'VI': 6, 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10,
+    'XI': 11, 'XII': 12, 'XIII': 13, 'XIV': 14, 'XV': 15,
+    'XVI': 16, 'XVII': 17
+};
+
+const ARABIC_TO_ROMAN = {
+    '1': 'I', '2': 'II', '3': 'III', '4': 'IV', '5': 'V',
+    '6': 'VI', '7': 'VII', '8': 'VIII', '9': 'IX', '10': 'X',
+    '11': 'XI', '12': 'XII', '13': 'XIII', '14': 'XIV', '15': 'XV',
+    '16': 'XVI', '17': 'XVII'
+};
+
+const chapterMap = new Map();
+if (typeof GR_RULES_DATA !== 'undefined') {
+    for (const r of GR_RULES_DATA) {
+        const m = r.category.match(/^(Chapter [IVXLCDM]+)\s*-\s*(.+)$/i);
+        if (!m) continue;
+        const k = m[1].trim();
+        const l = m[2].trim();
+        if (!chapterMap.has(k)) {
+            chapterMap.set(k, { label: l, rules: [] });
+        }
+        chapterMap.get(k).rules.push(r);
+    }
+}
+
+let currentChapter = null;
+let searchDebounce = null;
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+}
+
+function buildSidebar() {
+    const c = document.getElementById('sidebarChapters');
+    c.innerHTML = '';
+    for (const k of CHAPTER_ORDER) {
+        if (!chapterMap.has(k)) continue;
+        const ch = chapterMap.get(k);
+        const n = k.replace('Chapter ', '');
+        const el = document.createElement('div');
+        el.className = 'chapter-item';
+        el.dataset.chapter = k;
+        el.innerHTML = `
+            <span class="chapter-num">${n}</span>
+            <span class="chapter-name" title="${esc(ch.label)}">${esc(ch.label)}</span>
+            <span class="chapter-count-badge">${ch.rules.length}</span>
+        `;
+        el.addEventListener('click', () => openChapter(k));
+        c.appendChild(el);
+    }
+}
+
+function setActiveChapterInSidebar(k) {
+    document.querySelectorAll('.chapter-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.chapter === k);
+    });
+}
+
+function resolveChapterKey(raw) {
+    if (!raw) return null;
+    let s = raw.trim();
+    if (chapterMap.has(s)) return s;
+    if (chapterMap.has('Chapter ' + s)) return 'Chapter ' + s;
+    if (chapterMap.has('Chapter ' + s.toUpperCase())) return 'Chapter ' + s.toUpperCase();
+    if (ARABIC_TO_ROMAN[s] && chapterMap.has('Chapter ' + ARABIC_TO_ROMAN[s])) {
+        return 'Chapter ' + ARABIC_TO_ROMAN[s];
+    }
+    // Search by label substring
+    const lo = s.toLowerCase();
+    for (const [k, v] of chapterMap.entries()) {
+        if (v.label.toLowerCase().includes(lo)) return k;
+    }
+    return null;
+}
+
+function openChapter(k, targetRule) {
+    const resolvedKey = resolveChapterKey(k);
+    if (!resolvedKey || !chapterMap.has(resolvedKey)) return;
+
+    currentChapter = resolvedKey;
+    const ch = chapterMap.get(resolvedKey);
+    const n = resolvedKey.replace('Chapter ', '');
+
+    setActiveChapterInSidebar(resolvedKey);
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+    const searchClear = document.getElementById('searchClear');
+    if (searchClear) searchClear.classList.remove('visible');
+
+    const url = new URL(window.location);
+    url.searchParams.set('chapter', n);
+    url.searchParams.delete('search');
+    url.searchParams.delete('focusSearch');
+    history.replaceState({}, '', url);
+
+    const area = document.getElementById('contentArea');
+    area.innerHTML = '';
+
+    // Chapter heading banner
+    const hd = document.createElement('div');
+    hd.className = 'chapter-heading';
+    hd.innerHTML = `
+        <div class="chapter-heading-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            INDIAN RAILWAY GENERAL RULES &bull; CHAPTER ${n}
+        </div>
+        <div class="chapter-heading-title">${esc(ch.label)}</div>
+        <div class="chapter-heading-count">${ch.rules.length} Rules in this Chapter</div>
+    `;
+    area.appendChild(hd);
+
+    // List of rules in this chapter
+    for (const r of ch.rules) {
+        area.appendChild(buildRuleBlock(r, null));
+    }
+
+    document.getElementById('sidebar').classList.remove('open');
+
+    // Scroll to target rule if specified
+    if (targetRule) {
+        setTimeout(() => {
+            const ruleEl = document.getElementById('rule-' + encodeURIComponent(targetRule.replace(/\\s+/g, '_')));
+            if (ruleEl) {
+                ruleEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                ruleEl.classList.add('highlighted');
+                setTimeout(() => ruleEl.classList.remove('highlighted'), 2400);
+            }
+        }, 120);
+    } else {
+        area.scrollTop = 0;
+    }
+}
+
+function buildRuleBlock(rg, hl) {
+    const ft = rg.entries[0]?.text || '';
+    const tm = ft.match(/^([A-Z][A-Z0-9 ,&()\\/-]{2,80})[.\\-]/);
+    const rt = tm ? tm[1].trim() : '';
+
+    const block = document.createElement('div');
+    block.className = 'rule-block';
+    block.id = 'rule-' + encodeURIComponent(rg.rule.replace(/\\s+/g, '_'));
+
+    const hd = document.createElement('div');
+    hd.className = 'rule-block-header';
+    hd.innerHTML = `
+        <div class="rule-block-title-wrap">
+            <span class="rule-no-badge">${esc(rg.rule)}</span>
+            ${rt ? `<span class="rule-title-text">${esc(rt)}</span>` : ''}
+        </div>
+        <button class="rule-copy-btn" onclick="copySpecificRule('${esc(rg.rule)}', this)" title="Copy this rule">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            Copy
+        </button>
+    `;
+    block.appendChild(hd);
+
+    const body = document.createElement('div');
+    body.className = 'rule-body';
+
+    let lastSub = null;
+    let lastClause = null;
+
+    for (const e of rg.entries) {
+        const isHtmlEntry = e.text.trimStart().startsWith('<');
+        const rawSub = (e.sub || '').trim();
+        const rawClause = (e.clause || '').trim();
+        const line = document.createElement('div');
+
+        if (isHtmlEntry) {
+            line.className = 'gr-line gr-line--html';
+            const t = document.createElement('span');
+            t.className = 'gr-line-text';
+            t.innerHTML = e.text;
+            line.appendChild(t);
+            body.appendChild(line);
+            continue;
+        }
+
+        // Determine if rawSub is shown for the first time in this sub group
+        let showSub = false;
+        if (rawSub) {
+            if (rawSub !== lastSub) {
+                showSub = true;
+                lastSub = rawSub;
+                lastClause = null;
+            }
+        } else {
+            lastSub = null;
+            lastClause = null;
+        }
+
+        // Decompose compound clause if present (e.g. '(a)(i)' into '(a)' and '(i)')
+        let displayClause = rawClause;
+        let isSubclause = false;
+        if (rawClause) {
+            const m = rawClause.match(/^(\([a-zA-Z]+\))(\([ivxIVX\d]+\))$/);
+            if (m) {
+                const parentCl = m[1];
+                const childCl = m[2];
+                if (lastClause === parentCl) {
+                    displayClause = childCl;
+                    isSubclause = true;
+                } else {
+                    displayClause = rawClause;
+                    lastClause = parentCl;
+                }
+            } else if (/^\([ivxIVX\d]+\)$/.test(rawClause)) {
+                isSubclause = true;
+            } else {
+                lastClause = rawClause;
+            }
+        }
+
+        if (showSub && displayClause) {
+            // First time sub-rule is introduced directly with a clause (e.g. GR 3.71: (1) (a))
+            line.className = 'gr-line';
+            const pSub = document.createElement('span');
+            pSub.className = 'gr-line-prefix';
+            pSub.textContent = rawSub;
+            line.appendChild(pSub);
+
+            const pCl = document.createElement('span');
+            pCl.className = 'gr-line-prefix gr-line-prefix--clause';
+            pCl.textContent = displayClause;
+            line.appendChild(pCl);
+        } else if (showSub) {
+            // Normal sub-rule line (e.g. (1) or (2))
+            line.className = 'gr-line';
+            const p = document.createElement('span');
+            p.className = 'gr-line-prefix';
+            p.textContent = rawSub;
+            line.appendChild(p);
+        } else if (displayClause) {
+            // Indented clause under active sub-rule
+            if (isSubclause) {
+                line.className = 'gr-line gr-line--subclause';
+                const p = document.createElement('span');
+                p.className = 'gr-line-prefix gr-line-prefix--subclause';
+                p.textContent = displayClause;
+                line.appendChild(p);
+            } else {
+                line.className = 'gr-line gr-line--clause';
+                const p = document.createElement('span');
+                p.className = 'gr-line-prefix gr-line-prefix--clause';
+                p.textContent = displayClause;
+                line.appendChild(p);
+            }
+        } else if (rawSub) {
+            // Continuation paragraph under same sub-rule with no clause
+            line.className = 'gr-line gr-line--sub-cont';
+        } else {
+            // Heading or un-numbered text line
+            line.className = 'gr-line gr-line--heading';
+        }
+
+        const t = document.createElement('span');
+        t.className = 'gr-line-text';
+        if (hl) {
+            t.innerHTML = hilite(esc(e.text), hl);
+        } else {
+            t.textContent = e.text;
+        }
+        line.appendChild(t);
+
+        body.appendChild(line);
+    }
+    block.appendChild(body);
+    return block;
+}
+
+function copySpecificRule(ruleNum, btn) {
+    if (typeof GR_RULES_DATA === 'undefined') return;
+    const item = GR_RULES_DATA.find(r => r.rule === ruleNum);
+    if (!item) return;
+
+    const lines = item.entries.map(e => {
+        const prefix = [e.sub, e.clause].filter(Boolean).join(' ');
+        return prefix ? `${item.rule} ${prefix}  ${e.text}` : `${item.rule}  ${e.text}`;
+    });
+    const copyStr = lines.join('\\n');
+
+    navigator.clipboard.writeText(copyStr).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = `<span style="color:#2bf0bb;">Copied!</span>`;
+        setTimeout(() => { btn.innerHTML = orig; }, 1600);
+    }).catch(() => {
+        prompt("Copy Rule:", copyStr);
+    });
+}
+
+function handleSearch() {
+    const q = document.getElementById('searchInput').value.trim();
+    document.getElementById('searchClear').classList.toggle('visible', q.length > 0);
+    clearTimeout(searchDebounce);
+
+    if (!q) {
+        if (currentChapter) openChapter(currentChapter);
+        else renderWelcome();
+        return;
+    }
+    searchDebounce = setTimeout(() => doSearch(q), 180);
+}
+
+function quickSearch(keyword) {
+    const input = document.getElementById('searchInput');
+    input.value = keyword;
+    document.getElementById('searchClear').classList.add('visible');
+    doSearch(keyword);
+}
+
+function doSearch(q) {
+    if (typeof GR_RULES_DATA === 'undefined') return;
+    const lo = q.toLowerCase();
+
+    // Filter rules matching either the rule number, or any entry text
+    const results = GR_RULES_DATA.filter(r =>
+        r.rule.toLowerCase().includes(lo) ||
+        r.category.toLowerCase().includes(lo) ||
+        r.entries.some(e => e.text.toLowerCase().includes(lo))
+    );
+
+    const url = new URL(window.location);
+    url.searchParams.set('search', q);
+    url.searchParams.delete('chapter');
+    url.searchParams.delete('focusSearch');
+    history.replaceState({}, '', url);
+
+    setActiveChapterInSidebar(null);
+    currentChapter = null;
+
+    const area = document.getElementById('contentArea');
+    area.innerHTML = '';
+
+    const hd = document.createElement('div');
+    hd.className = 'search-header';
+    hd.innerHTML = `
+        <div class="search-header-title">Search Results across General Rules</div>
+        <div class="search-header-meta">Found <strong>${results.length}</strong> rule${results.length !== 1 ? 's' : ''} matching <strong>&quot;${esc(q)}&quot;</strong></div>
+    `;
+    area.appendChild(hd);
+
+    if (!results.length) {
+        area.innerHTML += `
+            <div class="empty-state">
+                <div class="empty-state-icon">&#128269;</div>
+                <div class="empty-state-title">No matching rules found</div>
+                <div class="empty-state-sub">Try searching with a different keyword like <em>Signals</em>, <em>Speed</em>, <em>Caution</em>, or a rule number like <em>3.03</em>.</div>
+            </div>
+        `;
+        return;
+    }
+
+    for (const r of results) {
+        area.appendChild(buildSearchBlock(r, q));
+    }
+    area.scrollTop = 0;
+}
+
+function buildSearchBlock(rg, q) {
+    const lo = q.toLowerCase();
+    const m = rg.category.match(/^(Chapter [IVXLCDM]+)\s*-\s*(.+)$/i);
+    const cn = m ? m[1].replace('Chapter ', '') : '';
+    const cl = m ? m[2] : rg.category;
+
+    const ft = rg.entries[0]?.text || '';
+    const tm = ft.match(/^([A-Z][A-Z0-9 ,&()\\/-]{2,80})[.\\-]/);
+    const rt = tm ? tm[1].trim() : '';
+
+    const block = document.createElement('div');
+    block.className = 'search-result-block';
+
+    const hd = document.createElement('div');
+    hd.className = 'search-result-header';
+    hd.title = `Click to open Chapter ${cn} and view this rule in context`;
+    hd.innerHTML = `
+        <div class="search-result-left">
+            <span class="search-result-chapter-tag">Ch. ${esc(cn)} &bull; ${esc(cl)}</span>
+            <span class="search-result-rule-badge">${esc(rg.rule)}</span>
+            ${rt ? `<span class="search-result-title">${esc(rt)}</span>` : ''}
+        </div>
+        <div class="search-result-open-tag">
+            <span>Read Chapter</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </div>
+    `;
+
+    if (m) {
+        hd.addEventListener('click', () => {
+            openChapter(m[1], rg.rule);
+        });
+    }
+    block.appendChild(hd);
+
+    const body = document.createElement('div');
+    body.className = 'search-result-body';
+
+    const hasMatchingEntry = rg.entries.some(e => {
+        // Skip HTML image entries (not searchable text)
+        if (e.text.trimStart().startsWith('<')) return false;
+        return e.text.toLowerCase().includes(lo);
+    });
+
+    let lastSub = null;
+    let lastClause = null;
+
+    for (const e of rg.entries) {
+        const isHtmlEntry = e.text.trimStart().startsWith('<');
+        // Skip image/HTML-only entries in search results
+        if (isHtmlEntry) continue;
+        // If query matched text, show matching lines; if query matched rule name/category, show all lines
+        if (hasMatchingEntry && !e.text.toLowerCase().includes(lo)) continue;
+
+        const rawSub = (e.sub || '').trim();
+        const rawClause = (e.clause || '').trim();
+        const line = document.createElement('div');
+
+        let showSub = false;
+        if (rawSub) {
+            if (rawSub !== lastSub) {
+                showSub = true;
+                lastSub = rawSub;
+                lastClause = null;
+            }
+        } else {
+            lastSub = null;
+            lastClause = null;
+        }
+
+        let displayClause = rawClause;
+        let isSubclause = false;
+        if (rawClause) {
+            const m = rawClause.match(/^(\([a-zA-Z]+\))(\([ivxIVX\d]+\))$/);
+            if (m) {
+                const parentCl = m[1];
+                const childCl = m[2];
+                if (lastClause === parentCl) {
+                    displayClause = childCl;
+                    isSubclause = true;
+                } else {
+                    displayClause = rawClause;
+                    lastClause = parentCl;
+                }
+            } else if (/^\([ivxIVX\d]+\)$/.test(rawClause)) {
+                isSubclause = true;
+            } else {
+                lastClause = rawClause;
+            }
+        }
+
+        if (showSub && displayClause) {
+            line.className = 'search-match-line';
+            const pSub = document.createElement('span');
+            pSub.className = 'search-line-prefix';
+            pSub.textContent = rawSub;
+            line.appendChild(pSub);
+
+            const pCl = document.createElement('span');
+            pCl.className = 'search-line-prefix search-line-prefix--clause';
+            pCl.textContent = displayClause;
+            line.appendChild(pCl);
+        } else if (showSub) {
+            line.className = 'search-match-line';
+            const pfx = document.createElement('span');
+            pfx.className = 'search-line-prefix';
+            pfx.textContent = rawSub;
+            line.appendChild(pfx);
+        } else if (displayClause) {
+            if (isSubclause) {
+                line.className = 'search-match-line search-match-line--subclause';
+                const pfx = document.createElement('span');
+                pfx.className = 'search-line-prefix search-line-prefix--subclause';
+                pfx.textContent = displayClause;
+                line.appendChild(pfx);
+            } else {
+                line.className = 'search-match-line search-match-line--clause';
+                const pfx = document.createElement('span');
+                pfx.className = 'search-line-prefix search-line-prefix--clause';
+                pfx.textContent = displayClause;
+                line.appendChild(pfx);
+            }
+        } else if (rawSub) {
+            line.className = 'search-match-line search-match-line--sub-cont';
+        } else {
+            line.className = 'search-match-line search-match-line--heading';
+        }
+
+        const txt = document.createElement('div');
+        txt.className = 'search-line-text';
+        txt.innerHTML = hilite(esc(e.text), q);
+        line.appendChild(txt);
+
+        body.appendChild(line);
+    }
+    block.appendChild(body);
+    return block;
+}
+
+function clearSearch() {
+    const input = document.getElementById('searchInput');
+    input.value = '';
+    document.getElementById('searchClear').classList.remove('visible');
+    if (currentChapter) openChapter(currentChapter);
+    else renderWelcome();
+}
+
+function renderWelcome() {
+    setActiveChapterInSidebar(null);
+    currentChapter = null;
+
+    const url = new URL(window.location);
+    url.searchParams.delete('chapter');
+    url.searchParams.delete('search');
+    url.searchParams.delete('focusSearch');
+    history.replaceState({}, '', url);
+
+    const totalR = typeof GR_RULES_DATA !== 'undefined' ? GR_RULES_DATA.length : 0;
+    const totalE = typeof GR_RULES_DATA !== 'undefined' ? GR_RULES_DATA.reduce((s, r) => s + r.entries.length, 0) : 0;
+
+    const area = document.getElementById('contentArea');
+    area.innerHTML = '';
+
+    const w = document.createElement('div');
+    w.className = 'welcome';
+    w.innerHTML = `
+        <div class="welcome-hero">
+            <div class="welcome-hero-badge">Official Railway Regulations</div>
+            <h1 class="welcome-title">INDIAN RAILWAY &ndash; GENERAL RULES</h1>
+            <p class="welcome-sub">The complete text of the Indian Railways (Open Lines) General Rules, 1976 &mdash; containing all operational procedures, safety mandates, signalling rules, and emergency guidelines across all 17 chapters.</p>
+            <div class="welcome-stats">
+                <div class="stat-pill"><strong>17</strong> Chapters</div>
+                <div class="stat-pill"><strong>${totalR}</strong> Rules</div>
+                <div class="stat-pill"><strong>${totalE}</strong> Sub-entries</div>
+            </div>
+        </div>
+
+        <div class="quick-topics">
+            <div class="quick-topics-label">Quick Search by Operational Topic:</div>
+            <div class="topics-wrap">
+                <button class="topic-chip" onclick="quickSearch('Signals')">&#128678; Signals</button>
+                <button class="topic-chip" onclick="quickSearch('Caution Order')">&#9888;&#65039; Caution Order</button>
+                <button class="topic-chip" onclick="quickSearch('Single Line')">&#128642; Single Line</button>
+                <button class="topic-chip" onclick="quickSearch('Double Line')">&#128643; Double Line</button>
+                <button class="topic-chip" onclick="quickSearch('Level Crossing')">&#128679; Level Crossings</button>
+                <button class="topic-chip" onclick="quickSearch('Accidents')">&#128657; Accidents</button>
+                <button class="topic-chip" onclick="quickSearch('Electric Traction')">&#9889; Electric Traction</button>
+                <button class="topic-chip" onclick="quickSearch('Fog')">&#127787;&#65039; Fog / Visibility</button>
+                <button class="topic-chip" onclick="quickSearch('Shunting')">&#128645; Shunting</button>
+                <button class="topic-chip" onclick="quickSearch('Speed')">&#9201;&#65039; Speed Restrictions</button>
+            </div>
+        </div>
+
+        <div class="welcome-grid-label">Browse by Chapter (The Book):</div>
+        <div class="welcome-chapters" id="welcomeChaptersGrid"></div>
+    `;
+    area.appendChild(w);
+
+    const grid = w.querySelector('#welcomeChaptersGrid');
+    for (const k of CHAPTER_ORDER) {
+        if (!chapterMap.has(k)) continue;
+        const ch = chapterMap.get(k);
+        const n = k.replace('Chapter ', '');
+        const card = document.createElement('div');
+        card.className = 'welcome-ch-card';
+        card.innerHTML = `
+            <div class="welcome-ch-num">${n}</div>
+            <div class="welcome-ch-info">
+                <div class="welcome-ch-name">${esc(ch.label)}</div>
+                <div class="welcome-ch-meta">${ch.rules.length} Rules</div>
+            </div>
+        `;
+        card.addEventListener('click', () => openChapter(k));
+        grid.appendChild(card);
+    }
+    area.scrollTop = 0;
+}
+
+function esc(s) {
+    return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function hilite(html, q) {
+    if (!q) return html;
+    const trimmed = q.trim();
+    if (!trimmed) return html;
+
+    // First try matching full phrase with word boundaries
+    const escapedPhrase = trimmed
+        .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        .replace(/\s+/g, '\\s+');
+    const phrasePattern = new RegExp('(\\b' + escapedPhrase + '\\b)', 'gi');
+
+    if (phrasePattern.test(html)) {
+        return html.replace(phrasePattern, '<mark>$1</mark>');
+    }
+
+    // Fall back to matching distinct individual words with word boundaries
+    const words = Array.from(new Set(trimmed.split(/\s+/).filter(w => w.length > 1)));
+    if (!words.length) return html;
+
+    words.sort((a, b) => b.length - a.length);
+    const safeWords = words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const wordPattern = new RegExp('(\\b(' + safeWords.join('|') + ')\\b)', 'gi');
+
+    return html.replace(wordPattern, '<mark>$1</mark>');
+}
+
+function printCurrentView() {
+    window.print();
+}
+
+// Initial Boot
+buildSidebar();
+
+const params = new URLSearchParams(window.location.search);
+if (params.has('search')) {
+    const q = params.get('search');
+    document.getElementById('searchInput').value = q;
+    document.getElementById('searchClear').classList.add('visible');
+    doSearch(q);
+} else if (params.has('chapter')) {
+    openChapter(params.get('chapter'));
+} else {
+    renderWelcome();
+}
+
+if (params.has('focusSearch')) {
+    setTimeout(() => {
+        const input = document.getElementById('searchInput');
+        if (input) {
+            input.focus();
+            input.select();
+        }
+    }, 150);
+}
+</script>
+</body>
+</html>
